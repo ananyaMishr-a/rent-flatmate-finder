@@ -53,3 +53,32 @@ class ListingOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class CompatibilityScoreOut(BaseModel):
+    id: int
+    tenant_id: int
+    listing_id: int
+    score: int
+    explanation: str
+    source: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class TenantProfileCreate(BaseModel):
+    preferred_location: str
+    budget_min: float
+    budget_max: float
+    move_in_date: Optional[datetime] = None
+
+class TenantProfileOut(BaseModel):
+    id: int
+    user_id: int
+    preferred_location: str
+    budget_min: float
+    budget_max: float
+    move_in_date: Optional[datetime]
+
+    class Config:
+        from_attributes = True

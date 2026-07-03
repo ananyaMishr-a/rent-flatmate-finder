@@ -34,3 +34,27 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         )
     access_token = auth.create_access_token(data={"sub": str(user.id)})
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/tenant-profile", response_model=schemas.TenantProfileOut)
+def create_tenant_profile(
+    profile: schemas.TenantProfileCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.require_role(models.UserRole.tenant)),
+):
+    existing = db.query(models.TenantProfile).filter(
+        models.TenantProfile.user_id == current_user.id
+    ).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Tenant profile already exists")
+
+    new_profile = models.TenantProfile(
+        user_id=current_user.id,
+        preferred_location=profile.preferred_location,
+        budget_min=profile.budget_min,
+        budget_max=profile.budget_max,
+        move_in_date=profile.move_in_date,
+    )
+    db.add(new_profile)
+    db.commit()
+    db.refresh(new_profile)
+    return new_profile
