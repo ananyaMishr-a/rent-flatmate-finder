@@ -82,3 +82,21 @@ class TenantProfileOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+from .models import InterestStatus
+
+class InterestRequestCreate(BaseModel):
+    listing_id: int
+
+class InterestRequestOut(BaseModel):
+    id: int
+    tenant_id: int
+    listing_id: int
+    status: InterestStatus
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class InterestStatusUpdate(BaseModel):
+    status: InterestStatus

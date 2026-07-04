@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import auth_router, listings_router, scoring_router
+from .routers import auth_router, listings_router, scoring_router, interest_router
 
 app = FastAPI(title="Rent & Flatmate Finder API")
 
@@ -15,6 +15,7 @@ app.add_middleware(
 app.include_router(auth_router.router)
 app.include_router(listings_router.router)
 app.include_router(scoring_router.router)
+app.include_router(interest_router.router)
 
 @app.get("/")
 def root():
